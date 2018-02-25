@@ -3,9 +3,13 @@ const os = std.os;
 const warn = std.debug.warn;
 
 pub fn main() void {
-    var seed_bytes: [20]u8 = undefined;
-    os.getRandomBytes(seed_bytes[0..]) catch |err| { };
-    for (seed_bytes) |b| {
-        warn("{}\n", b);
+    var bytes: [20]u8 = undefined;
+    os.getRandomBytes(bytes[0..]) catch |err| { };
+
+    var i:u8 = 0;
+    while (i < bytes.len) : (i += 4) {
+        warn("{}\n",
+            u64(bytes[i]) << 24 | u64(bytes[i + 1]) << 16 | u64(bytes[i + 2]) << 8 | u64(bytes[i + 3])
+        );
     }
 }
